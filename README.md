@@ -13,6 +13,10 @@ PHP Library ( PHP >= 5 ) CLI,CGI
 
 	Resolving BIG5 conflicts ASCII.
 
+> Learning Documents
+
+	Please read `readme.php` document.
+
 > Example
 
 	Save File
