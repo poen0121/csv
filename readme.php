@@ -144,7 +144,6 @@
 	$hpl_csv->puts($fp,array('test','3'));
 	$hpl_csv->close($fp);
 
-
 	Load File
 	--------------------------------------------------------------
 	$fp=$hpl_csv->open('test.csv','r');
