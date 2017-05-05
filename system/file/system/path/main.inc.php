@@ -420,12 +420,12 @@ if (!class_exists('hpl_path')) {
 				elseif (isset ($_SERVER['SCRIPT_FILENAME']) && (self :: is_root_model($path) || self :: is_relative($path))) {
 					if (self :: is_root_model($path)) {
 						$path = self :: arrive($path);
-						return (self :: clean($path) == self :: clean($_SERVER['SCRIPT_FILENAME']) ? true : false);
+						return (self :: clean($path) == self :: clean(strpos($_SERVER['SCRIPT_FILENAME'], '//') === 0 ? '/' . ltrim($_SERVER['SCRIPT_FILENAME'], '/') : $_SERVER['SCRIPT_FILENAME']) ? true : false);
 					} else {
 						$path = self :: arrive($path);
 						$path = explode('/', $path);
 						$path = array_reverse($path);
-						$script = self :: clean($_SERVER['SCRIPT_FILENAME']);
+						$script = self :: clean(strpos($_SERVER['SCRIPT_FILENAME'], '//') === 0 ? '/' . ltrim($_SERVER['SCRIPT_FILENAME'], '/') : $_SERVER['SCRIPT_FILENAME']);
 						$script = explode('/', $script);
 						$script = array_reverse($script);
 						$layer = 0;
