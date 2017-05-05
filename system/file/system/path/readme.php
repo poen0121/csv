@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_path function
-	Revision	: 3.8.4
+	Revision	: 3.8.5
 	Notes		: You can use chdir() change current script parent directories.
 
 	Revision History:
