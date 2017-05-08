@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_path function
-	Revision	: 3.8.5
+	Revision	: 3.8.6
 	Notes		: You can use chdir() change current script parent directories.
 
 	Revision History:
@@ -38,7 +38,7 @@
 	10-14-2016		Poen		10-14-2016	Poen		Improve is_files function.
 	10-18-2016		Poen		10-18-2016	Poen		Add is_self function.
 	10-19-2016		Poen		04-27-2017	Poen		Improve is_self function.
-	02-22-2017		Poen		05-05-2017	Poen		Debug is_self function.
+	02-22-2017		Poen		05-08-2017	Poen		Debug is_self function.
 	02-22-2017		Poen		02-22-2017	Poen		Debug arrive function.
 	02-22-2017		Poen		02-22-2017	Poen		Debug clean function.
 	03-27-2017		Poen		03-27-2017	Poen		Fix nexus_full_relative function error message.
