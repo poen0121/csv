@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_file function
-	Revision	: 4.2.1
+	Revision	: 4.2.2
 	Notes		:
 
 	Revision History:
