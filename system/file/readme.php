@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_file function
-	Revision	: 4.2.0
+	Revision	: 4.2.1
 	Notes		:
 
 	Revision History:
@@ -41,6 +41,9 @@
 	02-22-2017		Poen		02-22-2017	Poen		Debug size function.
 	02-22-2017		Poen		02-22-2017	Poen		Debug load function.
 	02-22-2017		Poen		02-22-2017	Poen		Debug save function.
+	06-07-2017		Poen		06-07-2017	Poen		Debug size2unit function.
+	06-07-2017		Poen		06-07-2017	Poen		Debug unit2min function.
+	06-07-2017		Poen		06-07-2017	Poen		Debug unit2max function.
 	---------------------------------------------------------------------------
 
 >> About

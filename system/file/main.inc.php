@@ -154,7 +154,7 @@ if (!class_exists('hpl_file')) {
 		 */
 		public static function unit2size($unitSize = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|([1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+)*){1}([.]{1}[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
+				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|[1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+){1}(\.[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
 					$data = explode(' ', $unitSize);
 					$size = (double) str_replace(',', '', $data[0]);
 					$type = strtoupper($data[1]);
@@ -207,7 +207,7 @@ if (!class_exists('hpl_file')) {
 		 */
 		public static function unit2min($unitSize = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|([1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+)*){1}([.]{1}[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
+				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|[1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+){1}(\.[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
 					$data = explode(' ', $unitSize);
 					$size = (double) str_replace(',', '', $data[0]);
 					$type = strtoupper($data[1]);
@@ -232,7 +232,7 @@ if (!class_exists('hpl_file')) {
 		 */
 		public static function unit2max($unitSize = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|([1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+)*){1}([.]{1}[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
+				if (preg_match('/^([0-9]|[1-9]{1}[0-9]{0,2}|[1-9]{1}[0-9]{0,2}([,]{1}[0-9]{3})+){1}(\.[0-9]{0,2}){0,1}[ \f\r\t\n]{1}(BYTE|KB|MB|GB|TB|PB|EB|ZB|YB)$/i', $unitSize)) {
 					$data = explode(' ', $unitSize);
 					$size = (double) str_replace(',', '', $data[0]);
 					$type = strtoupper($data[1]);
