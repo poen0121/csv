@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.8.0
+	Revision	: 2.8.1
 	Notes		:
 
 	Revision History:
@@ -23,6 +23,7 @@
 	03-15-2017		Poen		03-15-2017	Poen		Debug cast function uses the wrong error level to throw a file line error.
 	03-22-2017		Poen		03-22-2017	Poen		Fix cast function error message.
 	04-20-2017		Poen		04-20-2017	Poen		Support CLI normal error output.
+	06-21-2017		Poen		06-21-2017	Poen		Fix error log time and line breaks.
 	---------------------------------------------------------------------------
 
 >> About
