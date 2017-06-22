@@ -1,5 +1,5 @@
 # csv
-PHP Library ( PHP >= 5 ) CLI,CGI
+PHP Library ( PHP >= 5.2 ) CLI,CGI
 
 > About
 
