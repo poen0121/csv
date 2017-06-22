@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.8.1
+	Revision	: 2.9.1
 	Notes		:
 
 	Revision History:
@@ -24,6 +24,7 @@
 	03-22-2017		Poen		03-22-2017	Poen		Fix cast function error message.
 	04-20-2017		Poen		04-20-2017	Poen		Support CLI normal error output.
 	06-21-2017		Poen		06-21-2017	Poen		Fix error log time and line breaks.
+	06-22-2017		Poen		06-22-2017	Poen		Add peel error log mechanism.
 	---------------------------------------------------------------------------
 
 >> About
@@ -38,6 +39,12 @@
 	Set php.ini display_errors control display error message.
 
 	Set php.ini log_errors control save error message.
+
+>> Peel Error Logs
+
+	Use $_SERVER['PEEL_OFF_ERROR_LOG_FILE'] to save the peel off error log file location.
+
+	Use $_SERVER['PEEL_OFF_NAME'] to save the peel off name.
 
 >> Stack Trace
 

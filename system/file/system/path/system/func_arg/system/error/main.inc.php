@@ -9,12 +9,13 @@ if (!class_exists('hpl_error')) {
 		 * @param - string $errorMessage (error message)
 		 * @param - integer $errno (error level by error_reporting) : Default E_USER_NOTICE
 		 * @param - integer $echoDepth (location echo depth) : Default 0
-		 * @param - string $logTitle (log title) : Default 'PHP'
+		 * @param - string $logTitle (log title) : Default 'PHP' is system reserved words
 		 * @return - boolean
 		 * @usage - hpl_error::cast($errorMessage,$errno,$echoDepth,$logTitle);
 		 */
 		public static function cast($errorMessage = null, $errno = E_USER_NOTICE, $echoDepth = 0, $logTitle = 'PHP') {
-			if (func_num_args() > 4) {
+			$numargs = func_num_args();
+			if ($numargs > 4) {
 				if (error_reporting() & E_USER_WARNING) {
 					self :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects at most 4 parameters, ' . func_num_args() . ' given', E_USER_WARNING, 1);
 				}
@@ -78,11 +79,17 @@ if (!class_exists('hpl_error')) {
 				if ((error_reporting() & $errno)) {
 					$message = '<br /><b>' . $title . '</b>: ' . trim($errorMessage) . self :: where($echoDepth);
 					if (preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('log_errors'))) {
-						$file = (isset ($_SERVER['ERROR_LOG_FILE']) ? str_replace('\\', '/', $_SERVER['ERROR_LOG_FILE']) : '');
-						if (strlen($file) > 0 && !filter_var($file, FILTER_VALIDATE_URL) && substr($file, -1, 1) !== '/') {
-							error_log(date('[d-M-Y H:i:s e] ') . strtoupper(trim($logTitle)) . ' ' . strip_tags($message) . PHP_EOL, 3, $file);
+						$logTitle = strtoupper(trim($logTitle));
+						if (isset ($_SERVER['PEEL_OFF_ERROR_LOG_FILE']) && isset ($_SERVER['PEEL_OFF_NAME'])) {
+							$file = (isset ($_SERVER['PEEL_OFF_ERROR_LOG_FILE']) ? str_replace('\\', '/', $_SERVER['PEEL_OFF_ERROR_LOG_FILE']) : '');
+							$peelName = (isset ($_SERVER['PEEL_OFF_NAME']) ? strtoupper(trim($_SERVER['PEEL_OFF_NAME'])) : '');
+							if (($numargs < 4 || ($numargs == 4 && $logTitle != 'PHP')) && $peelName != 'PHP' && strlen($file) > 0 && !filter_var($file, FILTER_VALIDATE_URL) && substr($file, -1, 1) !== '/') {
+								error_log(date('[d-M-Y H:i:s e] ') . ($numargs == 4 ? $logTitle : $peelName) . ' ' . strip_tags($message) . PHP_EOL, 3, $file);
+							} else {
+								error_log($logTitle . ' ' . strip_tags($message), 0);
+							}
 						} else {
-							error_log(strtoupper(trim($logTitle)) . ' ' . strip_tags($message), 0);
+							error_log($logTitle . ' ' . strip_tags($message), 0);
 						}
 					}
 					if (preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('display_errors'))) {
