@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_csv function
-	Revision	: 3.7.0
+	Revision	: 3.7.1
 	Notes		: Excel CSV has 65,536 rows and 256 columns limit.
 
 	Revision History:
@@ -19,7 +19,7 @@
 	09-05-2016		Poen		09-05-2016	Poen		Add close function.
 	09-05-2016		Poen		09-06-2016	Poen		Improve puts function.
 	09-05-2016		Poen		09-05-2016	Poen		Remove save function.
-	09-07-2016		Poen		09-20-2016	Poen		Improve the program.
+	09-07-2016		Poen		06-30-2017	Poen		Improve the program.
 	09-14-2016		Poen		09-14-2016	Poen		Change putCsv function name become puts.
 	09-14-2016		Poen		09-14-2016	Poen		Change getCsv function name become gets.
 	09-20-2016		Poen		09-20-2016	Poen		Modify puts function returns boolean.
@@ -29,8 +29,6 @@
 	---------------------------------------------------------------------------
 
 >> About
-
-	GitHub : https://github.com/poen0121/csv
 
 	Comma separated values file processing.
 
@@ -135,8 +133,7 @@
 
 >> Example
 
-	Save File
-	--------------------------------------------------------------
+	//Save File
 	$hpl_csv=new hpl_csv('big5//ignore','utf-8');
 	$fp=$hpl_csv->open('test.csv','w');
 	$hpl_csv->puts($fp,array('test','1'));
@@ -144,8 +141,7 @@
 	$hpl_csv->puts($fp,array('test','3'));
 	$hpl_csv->close($fp);
 
-	Load File
-	--------------------------------------------------------------
+	//Load File
 	$fp=$hpl_csv->open('test.csv','r');
 	while($data=$hpl_csv->gets($fp))
 	{

@@ -95,7 +95,7 @@ if (!class_exists('hpl_csv')) {
 										$fp = false;
 										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
 									} else {
-										$this->fpList[] = & $fp;
+										$this->fpList[] = $fp;
 										$this->lockList[] = $loadLock;
 									}
 								}
