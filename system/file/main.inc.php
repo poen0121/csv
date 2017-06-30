@@ -21,7 +21,7 @@ if (!class_exists('hpl_file')) {
 			$caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
 			$caller = end($caller);
 			$message = __CLASS__ . '::' . $caller['function'] . '(): ' . $message;
-			//echo message
+			//response message
 			hpl_error :: cast($message, $errno, 3);
 			/* Don't execute PHP internal error handler */
 			return true;
