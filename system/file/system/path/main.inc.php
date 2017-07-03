@@ -174,7 +174,7 @@ if (!class_exists('hpl_path')) {
 				if (self :: is_absolute($scriptName) || (!self :: is_root_model($scriptName) && !self :: is_relative($scriptName))) {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid argument', E_USER_WARNING, 1);
 				}
-				elseif (isset ($_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) && strlen($_SERVER['REQUEST_SCHEME']) > 0 && strlen($_SERVER['SERVER_NAME']) > 0 && strlen($_SERVER['SERVER_PORT']) > 0) {
+				elseif (isset ($_SERVER['REQUEST_SCHEME'] { 0 }, $_SERVER['SERVER_NAME'] { 0 }, $_SERVER['SERVER_PORT'] { 0 }) && is_string($_SERVER['REQUEST_SCHEME']) && is_string($_SERVER['SERVER_NAME']) && is_string($_SERVER['SERVER_PORT'])) {
 					return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ($_SERVER['SERVER_PORT'] != '80' && $_SERVER['SERVER_PORT'] != '443' ? ':' . $_SERVER['SERVER_PORT'] : '') . self :: clean($scriptName);
 				}
 			}
@@ -206,7 +206,7 @@ if (!class_exists('hpl_path')) {
 		 * @usage - self::arrive_part($path);
 		 */
 		private static function arrive_part($path = null, $mode = null) {
-			if (strlen($path) > 0) {
+			if (isset ($path { 0 })) {
 				$path = explode('/', $path);
 				$path = array_reverse($path);
 				$end = (count($path) - 1);
@@ -225,11 +225,11 @@ if (!class_exists('hpl_path')) {
 							}
 						} else {
 							if ($layer == 0) {
-								if (strlen($part) > 0 || (strlen($part) == 0 && $sort < $end)) {
+								if (isset ($part { 0 }) || (!isset ($part { 0 }) && $sort < $end)) {
 									$keepPath[] = $part;
 								}
 							} else {
-								if ($sort < $end || (strlen($part) > 0 && $sort == $end)) {
+								if ($sort < $end || (isset ($part { 0 }) && $sort == $end)) {
 									$layer--;
 								}
 							}
@@ -288,7 +288,7 @@ if (!class_exists('hpl_path')) {
 		 * @usage - self::clean_part($path);
 		 */
 		private static function clean_part($path = null, $mode = null) {
-			if (strlen($path) > 0) {
+			if (isset ($path { 0 })) {
 				$pathPart = explode('/', $path);
 				$end = (count($pathPart) - 1);
 				$path = '';
@@ -296,7 +296,7 @@ if (!class_exists('hpl_path')) {
 					if (preg_match('/^(\.\.|\.)$/', $part)) {
 						$path .= ($sort == 0 ? '/' : '');
 					} else {
-						if (strlen($part) == 0) {
+						if (!isset ($part { 0 })) {
 							$path .= (!$mode || $sort == $end ? '' : '/');
 						} else {
 							$path .= $part . ($sort < $end ? '/' : '');
@@ -304,7 +304,7 @@ if (!class_exists('hpl_path')) {
 					}
 				}
 			}
-			return (strlen($path) > 0 ? (substr($path, 0, 1) !== '/' ? '/' : '') . $path : '/');
+			return (isset ($path { 0 }) ? (substr($path, 0, 1) !== '/' ? '/' : '') . $path : '/');
 		}
 		/** Get the correct full path script name.
 		 * @access - public function
@@ -331,7 +331,7 @@ if (!class_exists('hpl_path')) {
 					}
 				} else {
 					$path = self :: clean_part((self :: is_root_model($path) ? substr($path, strlen(self :: document_root())) : $path), $mode);
-					return (strlen($path) > 0 ? (!self :: is_relative($path) ? substr($path, 1) : $path) : '/');
+					return (isset ($path { 0 }) ? (!self :: is_relative($path) ? substr($path, 1) : $path) : '/');
 				}
 			}
 			return false;
@@ -342,7 +342,7 @@ if (!class_exists('hpl_path')) {
 		 * @usage - hpl_path::document_root();
 		 */
 		public static function document_root() {
-			if (!hpl_func_arg :: delimit2error() && isset ($_SERVER['DOCUMENT_ROOT'])) {
+			if (!hpl_func_arg :: delimit2error() && isset ($_SERVER['DOCUMENT_ROOT']) && is_string($_SERVER['DOCUMENT_ROOT']) ) {
 				$path = self :: norm($_SERVER['DOCUMENT_ROOT']);
 				return (substr($path, -1, 1) !== '/' ? $path . '/' : $path);
 			}
@@ -413,11 +413,11 @@ if (!class_exists('hpl_path')) {
 		 */
 		public static function is_self($path = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				if (isset ($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'], $_SERVER['SCRIPT_NAME']) && self :: is_absolute($path)) {
+				if (isset ($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'], $_SERVER['SCRIPT_NAME']) && is_string($_SERVER['SERVER_NAME']) && is_string($_SERVER['SERVER_PORT']) && is_string($_SERVER['SCRIPT_NAME']) && self :: is_absolute($path)) {
 					$path = self :: arrive($path);
 					return (parse_url($path, PHP_URL_HOST) === $_SERVER['SERVER_NAME'] && parse_url($path, PHP_URL_PATH) && self :: clean(parse_url($path, PHP_URL_PATH)) === self :: clean($_SERVER['SCRIPT_NAME']) && ((!parse_url($path, PHP_URL_PORT) && ($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443')) || (parse_url($path, PHP_URL_PORT) === $_SERVER['SERVER_PORT'])) ? true : false);
 				}
-				elseif (isset ($_SERVER['SCRIPT_FILENAME']) && (self :: is_root_model($path) || self :: is_relative($path))) {
+				elseif (isset ($_SERVER['SCRIPT_FILENAME']) && is_string($_SERVER['SCRIPT_FILENAME']) && (self :: is_root_model($path) || self :: is_relative($path))) {
 					if (self :: is_root_model($path)) {
 						$path = self :: arrive($path);
 						return (self :: clean($path) == self :: clean(realpath($_SERVER['SCRIPT_FILENAME'])) ? true : false);

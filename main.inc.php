@@ -54,7 +54,7 @@ if (!class_exists('hpl_csv')) {
 		public function open($path = null, $mode = null, $lock = true) {
 			$fp = false;
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: string2error(1) && !hpl_func_arg :: bool2error(2)) {
-				if (strlen($path) > 0) {
+				if (isset ($path { 0 })) {
 					clearstatcache();
 					$path = hpl_path :: norm($path);
 					if (!hpl_path :: is_absolute($path) && hpl_path :: is_files($path) && (($mode == 'r' && is_file($path) && is_readable($path)) || ($mode != 'r' && hpl_file :: name($path) && hpl_file :: extension($path) == 'csv'))) {

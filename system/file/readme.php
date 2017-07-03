@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_file function
-	Revision	: 4.2.2
+	Revision	: 4.3.2
 	Notes		:
 
 	Revision History:
@@ -27,7 +27,7 @@
 	09-06-2016		Poen		09-06-2016	Poen		Debug unit string preg_match regular expression.
 	09-07-2016		Poen		09-07-2016	Poen		Improve memory function.
 	09-07-2016		Poen		09-07-2016	Poen		Change create_dir function name become mk_dir.
-	09-08-2016		Poen		09-09-2016	Poen		Improve the program.
+	09-08-2016		Poen		07-03-2017	Poen		Improve the program.
 	09-08-2016		Poen		09-08-2016	Poen		Change get_mode function name become get_mod.
 	09-08-2016		Poen		09-08-2016	Poen		Change set_mode function name become ch_mod.
 	09-14-2016		Poen		09-14-2016	Poen		Debug save function.
