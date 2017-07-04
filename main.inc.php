@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('hpl_csv')) {
-	include (str_replace('\\', '/', dirname(__FILE__)) . '/system/file/main.inc.php');
+	include (strtr(dirname(__FILE__), '\\', '/') . '/system/file/main.inc.php');
 	/**
 	 * @about - comma separated values file processing.
 	 * @param - string $fileLang (file language) : Default big5//ignore
@@ -59,7 +59,7 @@ if (!class_exists('hpl_csv')) {
 					$path = hpl_path :: norm($path);
 					if (!hpl_path :: is_absolute($path) && hpl_path :: is_files($path) && (($mode == 'r' && is_file($path) && is_readable($path)) || ($mode != 'r' && hpl_file :: name($path) && hpl_file :: extension($path) == 'csv'))) {
 						$mode = strtolower($mode);
-						$modes = array ('r','w','a');
+						$modes = array ('r', 'w', 'a');
 						if (!in_array($mode, $modes)) {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid mode specified', E_USER_WARNING, 1);
 							return false;
@@ -169,24 +169,24 @@ if (!class_exists('hpl_csv')) {
 						//fgetcsv data
 						$d = preg_quote($delimiter);
 						$e = preg_quote($enclosure);
-						$_line = '';
+						$line = '';
 						$eof = false;
 						while ($eof != true) {
-							$_line .= (empty ($length) ? fgets($handle) : fgets($handle, $length));
-							$itemcnt = preg_match_all('/' . $e . '/', $_line);
+							$line .= (empty ($length) ? fgets($handle) : fgets($handle, $length));
+							$itemcnt = preg_match_all('/' . $e . '/', $line);
 							if ($itemcnt % 2 == 0) {
 								$eof = true;
 							}
 						}
-						$_csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($_line));
-						$_csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
-						preg_match_all($_csv_pattern, $_csv_line, $_csv_matches);
-						$_csv_data = $_csv_matches[1];
-						for ($_csv_i = 0; $_csv_i < count($_csv_data); $_csv_i++) {
-							$_csv_data[$_csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $_csv_data[$_csv_i]);
-							$_csv_data[$_csv_i] = str_replace($e . $e, $e, $_csv_data[$_csv_i]);
+						$csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($line));
+						$csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
+						preg_match_all($csv_pattern, $csv_line, $csv_matches);
+						$csv_data = $csv_matches[1];
+						for ($csv_i = 0; $csv_i < count($csv_data); $csv_i++) {
+							$csv_data[$csv_i] = preg_replace('/^' . $e . '(.*)' . $e . '$/s', '$1', $csv_data[$csv_i]);
+							$csv_data[$csv_i] = str_replace($e . $e, $e, $csv_data[$csv_i]);
 						}
-						$data = (empty ($_line) ? false : $_csv_data);
+						$data = (empty ($line) ? false : $csv_data);
 						restore_error_handler();
 						//fgetcsv data
 						if (is_array($data)) {

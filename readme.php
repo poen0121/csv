@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_csv function
-	Revision	: 3.8.1
+	Revision	: 3.9.1
 	Notes		: Excel CSV has 65,536 rows and 256 columns limit.
 
 	Revision History:
@@ -19,7 +19,7 @@
 	09-05-2016		Poen		09-05-2016	Poen		Add close function.
 	09-05-2016		Poen		09-06-2016	Poen		Improve puts function.
 	09-05-2016		Poen		09-05-2016	Poen		Remove save function.
-	09-07-2016		Poen		07-03-2017	Poen		Improve the program.
+	09-07-2016		Poen		07-04-2017	Poen		Improve the program.
 	09-14-2016		Poen		09-14-2016	Poen		Change putCsv function name become puts.
 	09-14-2016		Poen		09-14-2016	Poen		Change getCsv function name become gets.
 	09-20-2016		Poen		09-20-2016	Poen		Modify puts function returns boolean.

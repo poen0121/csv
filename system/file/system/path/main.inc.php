@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('hpl_path')) {
-	include (str_replace('\\', '/', dirname(__FILE__)) . '/system/func_arg/main.inc.php');
+	include (strtr(dirname(__FILE__), '\\', '/') . '/system/func_arg/main.inc.php');
 	/**
 	 * @about - processing file path.
 	 */
@@ -13,7 +13,7 @@ if (!class_exists('hpl_path')) {
 		 */
 		public static function norm($path = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				return str_replace('\\', '/', $path);
+				return strtr($path, '\\', '/');
 			}
 			return false;
 		}

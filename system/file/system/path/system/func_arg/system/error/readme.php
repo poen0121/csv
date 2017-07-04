@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.11.2
+	Revision	: 2.12.2
 	Notes		:
 
 	Revision History:

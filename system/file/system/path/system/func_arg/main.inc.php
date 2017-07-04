@@ -1,6 +1,6 @@
 <?php
 if (!class_exists('hpl_func_arg')) {
-	include (str_replace('\\', '/', dirname(__FILE__)) . '/system/error/main.inc.php');
+	include (strtr(dirname(__FILE__), '\\', '/') . '/system/error/main.inc.php');
 	/**
 	 * @about - Check the variable types from a user-defined function's argument list.
 	 */
