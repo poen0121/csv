@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.12.2
+	Revision	: 2.13.2
 	Notes		:
 
 	Revision History:
@@ -25,6 +25,7 @@
 	04-20-2017		Poen		04-20-2017	Poen		Support CLI normal error output.
 	06-21-2017		Poen		06-21-2017	Poen		Fix error log time and line breaks.
 	06-22-2017		Poen		06-22-2017	Poen		Add peel error log mechanism.
+	09-13-2017		Poen		09-13-2017	Poen		Add recessive signal message to the error_handler function.
 	---------------------------------------------------------------------------
 
 >> About
@@ -80,7 +81,8 @@
 	==============================================================
 
 	==============================================================
-	Throws an error and saves the error log.
+	Throws an error and saves the error log and sends a recessive signal message to the error_handler function.
+	Note : The error_handler will catch the message 'ERROR_TOUCH_SIGNAL' string.
 	Usage : hpl_error::cast($errorMessage,$errno,$echoDepth,$logTitle);
 	Param : string $errorMessage (error message)
 	Param : integer $errno (error level by error_reporting) : Default E_USER_NOTICE
@@ -102,6 +104,14 @@
 	}
 	test();//get location on line
 	==============================================================
+
+>> Example 
+
+	function TestErrorHandler($errno = null, $message = null, $file = null, $line = null) {
+		echo $message;
+	}
+	set_error_handler('TestErrorHandler');
+	hpl_error::cast('Test Error',E_USER_WARNING);
 
 */
 ?>

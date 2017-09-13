@@ -4,7 +4,8 @@ if (!class_exists('hpl_error')) {
 	 * @about - Throw an error by error_reporting control, and save the log records.
 	 */
 	class hpl_error {
-		/** Throws an error and saves the error log.
+		/** Throws an error and saves the error log and sends a recessive signal message to the error_handler function.
+		 * @note - The error_handler will catch the message 'ERROR_TOUCH_SIGNAL' string.
 		 * @access - public function
 		 * @param - string $errorMessage (error message)
 		 * @param - integer $errno (error level by error_reporting) : Default E_USER_NOTICE
@@ -77,24 +78,48 @@ if (!class_exists('hpl_error')) {
 				}
 				//This error code is included in error_reporting
 				if ((error_reporting() & $errno)) {
-					$message = '<br /><b>' . $title . '</b>: ' . trim($errorMessage) . self :: where($echoDepth);
-					if (preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('log_errors'))) {
-						$logTitle = strtoupper(trim($logTitle));
-						if (isset ($_SERVER['PEEL_OFF_ERROR_LOG_FILE'], $_SERVER['PEEL_OFF_NAME']) && is_string($_SERVER['PEEL_OFF_ERROR_LOG_FILE']) && is_string($_SERVER['PEEL_OFF_NAME'])) {
-							$file = strtr($_SERVER['PEEL_OFF_ERROR_LOG_FILE'], '\\', '/');
-							$peelName = strtoupper(trim($_SERVER['PEEL_OFF_NAME']));
-							if (($numargs < 4 || ($numargs == 4 && $logTitle != 'PHP')) && $peelName != 'PHP' && isset ($file { 0 }) && !filter_var($file, FILTER_VALIDATE_URL) && substr($file, -1, 1) !== '/') {
-								error_log(date('[d-M-Y H:i:s e] ') . ($numargs == 4 ? $logTitle : $peelName) . ' ' . strip_tags($message) . PHP_EOL, 3, $file);
+					/* output message */
+					$is_record = preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('log_errors'));
+					$is_display = preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('display_errors'));
+					if ($is_record || $is_display) {
+						$message = '<br /><b>' . $title . '</b>: ' . trim($errorMessage) . self :: where($echoDepth);
+						if ($is_record) {
+							$logTitle = strtoupper(trim($logTitle));
+							if (isset ($_SERVER['PEEL_OFF_ERROR_LOG_FILE'], $_SERVER['PEEL_OFF_NAME']) && is_string($_SERVER['PEEL_OFF_ERROR_LOG_FILE']) && is_string($_SERVER['PEEL_OFF_NAME'])) {
+								$file = strtr($_SERVER['PEEL_OFF_ERROR_LOG_FILE'], '\\', '/');
+								$peelName = strtoupper(trim($_SERVER['PEEL_OFF_NAME']));
+								if (($numargs < 4 || ($numargs == 4 && $logTitle != 'PHP')) && $peelName != 'PHP' && isset ($file {
+									0 }) && !filter_var($file, FILTER_VALIDATE_URL) && substr($file, -1, 1) !== '/') {
+									error_log(date('[d-M-Y H:i:s e] ') . ($numargs == 4 ? $logTitle : $peelName) . ' ' . strip_tags($message) . PHP_EOL, 3, $file);
+								} else {
+									error_log($logTitle . ' ' . strip_tags($message), 0);
+								}
 							} else {
 								error_log($logTitle . ' ' . strip_tags($message), 0);
 							}
-						} else {
-							error_log($logTitle . ' ' . strip_tags($message), 0);
+						}
+						if ($is_display) {
+							echo PHP_EOL, (isset ($_SERVER['argc']) && $_SERVER['argc'] >= 1 ? strip_tags($message) : $message), PHP_EOL;
 						}
 					}
-					if (preg_match('/^(on|(\+|-)?[0-9]*[1-9]+[0-9]*)$/i', ini_get('display_errors'))) {
-						echo PHP_EOL , (isset ($_SERVER['argc']) && $_SERVER['argc'] >= 1 ? strip_tags($message) : $message) , PHP_EOL;
-					}
+				}
+				/* throws a signal to error_handler function */
+				$signal = true;
+				if ($errorMessage == 'ERROR_TOUCH_SIGNAL') {
+					$caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+					$caller = end($caller);
+					$signal = (!isset ($caller['class']) && isset ($caller['function']) && $caller['function'] == 'trigger_error' ? false : true);
+				}
+				if ($signal) {
+					$log_errors = ini_get('log_errors');
+					$display_errors = ini_get('display_errors');
+					/* shield */
+					ini_set('log_errors', 0);
+					ini_set('display_errors', 0);
+					trigger_error('ERROR_TOUCH_SIGNAL');
+					/* restore configuration */
+					ini_set('log_errors', $log_errors);
+					ini_set('display_errors', $display_errors);
 				}
 				if ($title == 'Fatal error') {
 					exit;
