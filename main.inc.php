@@ -16,32 +16,9 @@ if (!class_exists('hpl_csv')) {
 			$this->fpList = array ();
 			$this->lockList = array ();
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: string2error(1)) {
-				set_error_handler(__CLASS__ . '::ErrorHandler');
 				$this->encodingForm = iconv($this->fileLang, $this->sysLang, '');
 				$this->encodingForm = ($this->encodingForm === false ? false : true);
-				restore_error_handler();
 			}
-		}
-		/** Error handler.
-		 * @access - private function
-		 * @param - integer $errno (error number)
-		 * @param - string $message (error message)
-		 * @return - boolean|null
-		 * @usage - set_error_handler(__CLASS__.'::ErrorHandler');
-		 */
-		private static function ErrorHandler($errno = null, $message = null) {
-			if (!(error_reporting() & $errno)) {
-				// This error code is not included in error_reporting
-				return;
-			}
-			//replace message target function
-			$caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-			$caller = end($caller);
-			$message = __CLASS__ . '::' . $caller['function'] . '(): ' . $message;
-			//response message
-			hpl_error :: cast($message, $errno, 3);
-			/* Don't execute PHP internal error handler */
-			return true;
 		}
 		/** Opens localhost file.
 		 * @access - public function
@@ -68,9 +45,7 @@ if (!class_exists('hpl_csv')) {
 							if ($mode != 'r') { //check dir
 								$dir = hpl_file :: directory($path);
 								if (!file_exists($dir)) {
-									set_error_handler(__CLASS__ . '::ErrorHandler');
 									$result = mkdir($dir, 0755, true);
-									restore_error_handler();
 								}
 								elseif (is_dir($dir)) {
 									$result = true;
@@ -82,7 +57,6 @@ if (!class_exists('hpl_csv')) {
 								$result = true;
 							}
 							if ($result) { //check dir result
-								set_error_handler(__CLASS__ . '::ErrorHandler');
 								$fp = fopen($path, $mode);
 								if ($fp) {
 									if ($mode == 'r') {
@@ -99,7 +73,6 @@ if (!class_exists('hpl_csv')) {
 										$this->lockList[] = $loadLock;
 									}
 								}
-								restore_error_handler();
 							}
 						} else {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Wrong charset encoding', E_USER_WARNING, 1);
@@ -134,9 +107,7 @@ if (!class_exists('hpl_csv')) {
 							$data[$i] = iconv($this->sysLang, $this->fileLang, $val);
 						}
 					}
-					set_error_handler(__CLASS__ . '::ErrorHandler');
 					$result = (fputcsv($handle, $data) > 0 ? true : false);
-					restore_error_handler();
 				}
 			}
 			return $result;
@@ -165,7 +136,6 @@ if (!class_exists('hpl_csv')) {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): missing parenthesis character', E_USER_WARNING, 1);
 				} else {
 					if (!feof($handle)) {
-						set_error_handler(__CLASS__ . '::ErrorHandler');
 						//fgetcsv data
 						$d = preg_quote($delimiter);
 						$e = preg_quote($enclosure);
@@ -187,7 +157,6 @@ if (!class_exists('hpl_csv')) {
 							$csv_data[$csv_i] = str_replace($e . $e, $e, $csv_data[$csv_i]);
 						}
 						$data = (empty ($line) ? false : $csv_data);
-						restore_error_handler();
 						//fgetcsv data
 						if (is_array($data)) {
 							foreach ($data as $key => $val) {

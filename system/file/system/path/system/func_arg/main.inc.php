@@ -66,6 +66,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::delimit2error();
 		 */
 		public static function delimit2error() {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$caller = end($backtrace);
 			if (isset ($caller['class']) && $caller['class'] == __CLASS__) {
@@ -98,6 +99,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::array2error($var);
 		 */
 		public static function array2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -118,6 +120,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::bool2error($var);
 		 */
 		public static function bool2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -138,6 +141,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::double2error($var);
 		 */
 		public static function double2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -158,6 +162,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::int2error($var);
 		 */
 		public static function int2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -178,6 +183,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::null2error($var);
 		 */
 		public static function null2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -198,6 +204,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::numeric2error($var);
 		 */
 		public static function numeric2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -218,6 +225,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::object2error($var);
 		 */
 		public static function object2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -238,6 +246,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::resource2error($var);
 		 */
 		public static function resource2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);
@@ -258,6 +267,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @usage - hpl_func_arg::string2error($var);
 		 */
 		public static function string2error($var = null) {
+			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$itself = current($backtrace);
 			$caller = end($backtrace);

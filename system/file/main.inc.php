@@ -5,27 +5,6 @@ if (!class_exists('hpl_file')) {
 	 * @about - file operations.
 	 */
 	class hpl_file {
-		/** Error handler.
-		 * @access - private function
-		 * @param - integer $errno (error number)
-		 * @param - string $message (error message)
-		 * @return - boolean|null
-		 * @usage - set_error_handler(__CLASS__.'::ErrorHandler');
-		 */
-		private static function ErrorHandler($errno = null, $message = null) {
-			if (!(error_reporting() & $errno)) {
-				// This error code is not included in error_reporting
-				return;
-			}
-			//replace message target function
-			$caller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
-			$caller = end($caller);
-			$message = __CLASS__ . '::' . $caller['function'] . '(): ' . $message;
-			//response message
-			hpl_error :: cast($message, $errno, 3);
-			/* Don't execute PHP internal error handler */
-			return true;
-		}
 		/** Get localhost file permissions code.
 		 * @access - public function
 		 * @param - string $path (file path)
@@ -39,9 +18,7 @@ if (!class_exists('hpl_file')) {
 					clearstatcache();
 					$path = hpl_path :: norm($path);
 					if (!hpl_path :: is_absolute($path) && (is_file($path) || is_dir($path))) {
-						set_error_handler(__CLASS__ . '::ErrorHandler');
 						$result = substr(sprintf('%o', fileperms($path)), -4);
-						restore_error_handler();
 					} else {
 						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
 					}
@@ -65,9 +42,7 @@ if (!class_exists('hpl_file')) {
 					clearstatcache();
 					$path = hpl_path :: norm($path);
 					if (!hpl_path :: is_absolute($path) && (is_file($path) || is_dir($path))) {
-						set_error_handler(__CLASS__ . '::ErrorHandler');
 						$result = chmod($path, $power);
-						restore_error_handler();
 					} else {
 						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
 					}
@@ -262,9 +237,7 @@ if (!class_exists('hpl_file')) {
 					clearstatcache();
 					$path = hpl_path :: norm($path);
 					if (!hpl_path :: is_absolute($path) && is_file($path)) {
-						set_error_handler(__CLASS__ . '::ErrorHandler');
 						$size = filesize($path);
-						restore_error_handler();
 						if ($size !== false) {
 							if ($size > (1024 * pow(1024, 8))) {
 								hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Size has been unable to handle', E_USER_WARNING, 1);
@@ -305,7 +278,6 @@ if (!class_exists('hpl_file')) {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid mode specified', E_USER_WARNING, 1);
 							return false;
 						}
-						set_error_handler(__CLASS__ . '::ErrorHandler');
 						$fp = fopen($path, $mode);
 						if ($fp) {
 							$action = ($lock ? flock($fp, LOCK_SH) : true);
@@ -326,7 +298,6 @@ if (!class_exists('hpl_file')) {
 							}
 							fclose($fp);
 						}
-						restore_error_handler();
 					} else {
 						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
 					}
@@ -361,9 +332,7 @@ if (!class_exists('hpl_file')) {
 						clearstatcache();
 						$dir = self :: directory($path);
 						if (!file_exists($dir)) {
-							set_error_handler(__CLASS__ . '::ErrorHandler');
 							$result = mkdir($dir, 0755, true);
-							restore_error_handler();
 						}
 						elseif (is_dir($dir)) {
 							$result = true;
@@ -373,7 +342,6 @@ if (!class_exists('hpl_file')) {
 						if ($result) { //check dir result
 							$result = false; //init result
 							$bytes = strlen($content);
-							set_error_handler(__CLASS__ . '::ErrorHandler');
 							$fp = fopen($path, $mode);
 							if ($fp) {
 								$action = ($lock ? flock($fp, LOCK_EX) : true);
@@ -391,7 +359,6 @@ if (!class_exists('hpl_file')) {
 								}
 								fclose($fp);
 							}
-							restore_error_handler();
 						}
 					} else {
 						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
@@ -417,14 +384,10 @@ if (!class_exists('hpl_file')) {
 					if (!hpl_path :: is_absolute($dir)) {
 						clearstatcache();
 						if (!file_exists($dir)) {
-							set_error_handler(__CLASS__ . '::ErrorHandler');
 							$result = mkdir($dir, $power, true);
-							restore_error_handler();
 						}
 						elseif (is_dir($dir)) {
-							set_error_handler(__CLASS__ . '::ErrorHandler');
 							$result = chmod($dir, $power);
-							restore_error_handler();
 						} else {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $dir, E_USER_WARNING, 1);
 						}
