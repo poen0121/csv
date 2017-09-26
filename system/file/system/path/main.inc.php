@@ -225,7 +225,7 @@ if (!class_exists('hpl_path')) {
 							}
 						} else {
 							if ($layer == 0) {
-								if (isset ($part { 0 }) || (!isset ($part { 0 }) && $sort < $end)) {
+								if (isset ($part { 0 }) || $sort < $end) {
 									$keepPath[] = $part;
 								}
 							} else {

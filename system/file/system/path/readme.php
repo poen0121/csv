@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_path function
-	Revision	: 3.10.6
+	Revision	: 3.10.7
 	Notes		: You can use chdir() change current script parent directories.
 
 	Revision History:
@@ -23,7 +23,7 @@
 	08-24-2016		Poen		08-24-2016	Poen		Add full_relative function.
 	08-24-2016		Poen		08-24-2016	Poen		Add nexus_full_relative function.
 	08-25-2016		Poen		08-25-2016	Poen		Change full function name become script.
-	09-08-2016		Poen		07-04-2017	Poen		Improve the program.
+	09-08-2016		Poen		09-26-2017	Poen		Improve the program.
 	09-09-2016		Poen		09-09-2016	Poen		Debug nexus_full_relative function.
 	09-09-2016		Poen		09-09-2016	Poen		Improve full_relative function.
 	09-09-2016		Poen		09-09-2016	Poen		Improve script function.
