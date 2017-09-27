@@ -361,7 +361,6 @@ if (!class_exists('hpl_error')) {
 			restore_error_handler();
 			/* remove */
 			if (!$native) {
-				self :: $castList[$id] = null;
 				unset (self :: $castList[$id]);
 			}
 			/* fatal exit */
