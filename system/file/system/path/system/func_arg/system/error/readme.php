@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.14.4
+	Revision	: 2.14.5
 	Notes		:
 
 	Revision History:
@@ -32,6 +32,7 @@
 	09-13-2017		Poen		09-18-2017	Poen		Add trace function.
 	09-13-2017		Poen		09-18-2017	Poen		Add cast_log_title function.
 	09-13-2017		Poen		09-18-2017	Poen		Add capture function.
+	02-06-2018		Poen		02-06-2018	Poen		Fix PHP 7 content function to retain original input args.
 	---------------------------------------------------------------------------
 
 >> About
@@ -46,9 +47,9 @@
 	Set php.ini display_errors control display error message.
 
 	Set php.ini log_errors control save error message.
-	
+
 	Class function stack trace is turned off by default.
-	
+
 >> Note
 
 	If the hpl_error::cast function is used in the current error_handler function, the default error_handler function hpl_error::ErrorHandler is used.
@@ -56,12 +57,12 @@
 	If the hpl_error::cast function is used in the error_handler function, the echo depth will be limited to the error_handler function range.
 
 	If the hpl_error::cast function is used in the current error_handler function, the stack trace will be closed.
-	
+
 	If the hpl_error::capture function $exit is false, the script will not exit but the next error still stops capturing.
-	
+
 >> Peel Error Logs
 
-	Allows the stripping of the capture error mode so that the stored information is stored 
+	Allows the stripping of the capture error mode so that the stored information is stored
 	at the specified file location when the system archive location can not be changed.
 
 	Usage : hpl_error::error_log_file function
@@ -71,7 +72,7 @@
 	Stack trace calls will consume memory.
 
 	Stack trace grab file and line echo location.
-	
+
 	Usage : hpl_error::trace function
 
 >> Error Level
@@ -115,7 +116,7 @@
 	trigger_error('Test Error',E_USER_WARNING);
 	Output >> TRUE
 	==============================================================
-	
+
 	==============================================================
 	Set PHP log errors to specified default file.
 	Usage : hpl_error::error_log_file($path,$peel);
@@ -140,7 +141,7 @@
 	hpl_error::error_log_file('./');
 	Output >> FALSE
 	==============================================================
-	
+
 	==============================================================
 	Set the error stack trace mode.
 	Usage : hpl_error::trace($switch);
@@ -155,7 +156,7 @@
 	hpl_error::trace(true);
 	Output >> TRUE
 	==============================================================
-		
+
 	==============================================================
 	Set the error cast function default log title.
 	Usage : hpl_error::cast_log_title($default);
@@ -231,7 +232,7 @@
 	Output >> TRUE
 	==============================================================
 
->> Example 
+>> Example
 
 	function ErrorHandler() {
 		return hpl_error::capture();

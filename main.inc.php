@@ -33,8 +33,8 @@ if (!class_exists('hpl_csv')) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: string2error(1) && !hpl_func_arg :: bool2error(2)) {
 				if (isset ($path { 0 })) {
 					clearstatcache();
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && hpl_path :: is_files($path) && (($mode == 'r' && is_file($path) && is_readable($path)) || ($mode != 'r' && hpl_file :: name($path) && hpl_file :: extension($path) == 'csv'))) {
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && hpl_path :: is_files($normPath) && (($mode == 'r' && is_file($normPath) && is_readable($normPath)) || ($mode != 'r' && hpl_file :: name($normPath) && hpl_file :: extension($normPath) == 'csv'))) {
 						$mode = strtolower($mode);
 						$modes = array ('r', 'w', 'a');
 						if (!in_array($mode, $modes)) {
@@ -43,7 +43,7 @@ if (!class_exists('hpl_csv')) {
 						}
 						elseif ($this->encodingForm) {
 							if ($mode != 'r') { //check dir
-								$dir = hpl_file :: directory($path);
+								$dir = hpl_file :: directory($normPath);
 								if (!file_exists($dir)) {
 									$result = mkdir($dir, 0755, true);
 								}
@@ -51,13 +51,13 @@ if (!class_exists('hpl_csv')) {
 									$result = true;
 								} else {
 									$result = false;
-									hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+									hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 								}
 							} else {
 								$result = true;
 							}
 							if ($result) { //check dir result
-								$fp = fopen($path, $mode);
+								$fp = fopen($normPath, $mode);
 								if ($fp) {
 									if ($mode == 'r') {
 										$loadLock = ($lock ? flock($fp, LOCK_SH) : false);
@@ -67,7 +67,7 @@ if (!class_exists('hpl_csv')) {
 									if ($lock && !$loadLock) {
 										fclose($fp);
 										$fp = false;
-										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
+										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $normPath . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
 									} else {
 										$this->fpList[] = $fp;
 										$this->lockList[] = $loadLock;
@@ -75,10 +75,10 @@ if (!class_exists('hpl_csv')) {
 								}
 							}
 						} else {
-							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Wrong charset encoding', E_USER_WARNING, 1);
+							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $normPath . '): failed to open stream: Wrong charset encoding', E_USER_WARNING, 1);
 						}
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);

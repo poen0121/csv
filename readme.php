@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_csv function
-	Revision	: 3.9.2
+	Revision	: 3.9.3
 	Notes		: Excel CSV has 65,536 rows and 256 columns limit.
 
 	Revision History:
@@ -26,6 +26,7 @@
 	09-29-2016		Poen		11-21-2016	Poen		Debug the program error messages.
 	09-30-2016		Poen		09-30-2016	Poen		Debug clearstatcache().
 	02-22-2017		Poen		02-22-2017	Poen		Debug open function.
+	02-05-2018		Poen		02-05-2018	Poen		Fix PHP 7 content function to retain original input args.
 	---------------------------------------------------------------------------
 
 >> About

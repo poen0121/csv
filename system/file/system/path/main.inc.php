@@ -28,10 +28,10 @@ if (!class_exists('hpl_path')) {
 				if (self :: is_absolute($path) || (!self :: is_root_model($path) && !self :: is_relative($path))) {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid argument', E_USER_WARNING, 1);
 				} else {
-					$path = self :: arrive($path);
-					$path = explode('/', $path);
+					$arrivePath = self :: arrive($path);
+					$arrivePath = explode('/', $arrivePath);
 					$count = 0;
-					foreach ($path as $part) {
+					foreach ($arrivePath as $part) {
 						if (preg_match('/^\.\.$/', $part)) {
 							$count += 1;
 						} else {
@@ -59,14 +59,14 @@ if (!class_exists('hpl_path')) {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid argument by parameter 2', E_USER_WARNING, 1);
 				} else {
 					$isRootModel = self :: is_root_model($path);
-					$scriptName = self :: clean($scriptName);
-					$scriptPathLen = self :: relative_layer_count(self :: relative($scriptName));
+					$getScriptName = self :: clean($scriptName);
+					$scriptPathLen = self :: relative_layer_count(self :: relative($getScriptName));
 					$pathLen = self :: relative_layer_count(self :: full_relative($path));
-					$ownPath = explode('/', $scriptName);
+					$ownPath = explode('/', $getScriptName);
 					$ownPath = array_slice($ownPath, 1, -1);
 					$layer = $pathLen - $scriptPathLen; //more upper layers
-					$path = self :: arrive($path);
-					return ($layer > 0 ? str_repeat('../', $layer) : '') . (count($ownPath) > 0 ? str_repeat('../', count($ownPath)) : ($layer > 0 ? '' : './')) . substr((!$isRootModel ? self :: script($path) : self :: clean($path)), 1);
+					$arrivePath = self :: arrive($path);
+					return ($layer > 0 ? str_repeat('../', $layer) : '') . (count($ownPath) > 0 ? str_repeat('../', count($ownPath)) : ($layer > 0 ? '' : './')) . substr((!$isRootModel ? self :: script($arrivePath) : self :: clean($arrivePath)), 1);
 				}
 			}
 			return false;
@@ -90,10 +90,10 @@ if (!class_exists('hpl_path')) {
 						$ownPath = explode('/', $scriptDir);
 						$ownPath = array_slice($ownPath, 1, -1);
 						$isRootModel = self :: is_root_model($path);
-						$path = self :: arrive($path);
-						$layer = self :: relative_layer_count($path) - count($ownPath);
+						$arrivePath = self :: arrive($path);
+						$layer = self :: relative_layer_count($arrivePath) - count($ownPath);
 						$layer = ($isRootModel ? count($ownPath) + $layer : $layer); //more upper layers
-						return ($layer > 0 ? str_repeat('../', $layer) : '') . (count($ownPath) > 0 ? str_repeat('../', count($ownPath)) : ($layer > 0 ? '' : './')) . substr((!$isRootModel ? self :: script($path) : self :: clean($path)), 1);
+						return ($layer > 0 ? str_repeat('../', $layer) : '') . (count($ownPath) > 0 ? str_repeat('../', count($ownPath)) : ($layer > 0 ? '' : './')) . substr((!$isRootModel ? self :: script($arrivePath) : self :: clean($arrivePath)), 1);
 					} else {
 						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Parent directories does not have the readable', E_USER_WARNING, 1);
 					}
@@ -122,13 +122,13 @@ if (!class_exists('hpl_path')) {
 							$scriptDir = self :: clean($scriptDir);
 							$ownPath = explode('/', $scriptDir);
 							$ownPathLen = count($ownPath) - 1;
-							$path = self :: arrive($path);
-							$cut = self :: relative_layer_count($path); //for cut own path
-							$path = self :: clean($path);
-							$suffixPath = explode('/', $path);
+							$arrivePath = self :: arrive($path);
+							$cut = self :: relative_layer_count($arrivePath); //for cut own path
+							$arrivePath = self :: clean($arrivePath);
+							$suffixPath = explode('/', $arrivePath);
 							$suffixPath = array_slice($suffixPath, 1);
-							$path = implode('/', array_merge(array_slice($ownPath, 1, - ($cut +1)), $suffixPath));
-							return (substr($path, 0, 1) !== '/' ? '/' . $path : $path);
+							$arrivePath = implode('/', array_merge(array_slice($ownPath, 1, - ($cut +1)), $suffixPath));
+							return (substr($arrivePath, 0, 1) !== '/' ? '/' . $arrivePath : $arrivePath);
 						} else {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Parent directories does not have the readable', E_USER_WARNING, 1);
 						}
@@ -207,12 +207,12 @@ if (!class_exists('hpl_path')) {
 		 */
 		private static function arrive_part($path = null, $mode = null) {
 			if (isset ($path { 0 })) {
-				$path = explode('/', $path);
-				$path = array_reverse($path);
-				$end = (count($path) - 1);
+				$pathInfo = explode('/', $path);
+				$pathInfo = array_reverse($pathInfo);
+				$end = (count($pathInfo) - 1);
 				$layer = 0;
 				$keepPath = array ();
-				foreach ($path as $sort => $part) {
+				foreach ($pathInfo as $sort => $part) {
 					if (preg_match('/^\.\.$/', $part)) {
 						if ($sort == 0) {
 							$keepPath[] = '';
@@ -237,12 +237,11 @@ if (!class_exists('hpl_path')) {
 					}
 				}
 				$keepPath = array_reverse($keepPath);
-				$path = ($layer > 0 ? str_repeat('../', $layer) : './') . implode('/', $keepPath);
-				return ($mode ? $path : preg_replace('/(\/)+/', '/', $path));
+				$pathInfo = ($layer > 0 ? str_repeat('../', $layer) : './') . implode('/', $keepPath);
+				return ($mode ? $pathInfo : preg_replace('/(\/)+/', '/', $pathInfo));
 			} else {
 				return './';
 			}
-
 		}
 		/** Returns the full path to arrive.
 		 * @access - public function
@@ -253,30 +252,30 @@ if (!class_exists('hpl_path')) {
 		 */
 		public static function arrive($path = null, $mode = false) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				$path = self :: norm($path);
-				if (self :: is_absolute($path)) {
-					$uriPath = parse_url($path, PHP_URL_PATH);
+				$normPath = self :: norm($path);
+				if (self :: is_absolute($normPath)) {
+					$uriPath = parse_url($normPath, PHP_URL_PATH);
 					if ($uriPath) {
 						if ($uriPath == '//') {
-							$schemeLen = strpos($path, '://', 0) + 3;
-							$divide = $schemeLen +strpos(substr($path, $schemeLen), '//', 0);
+							$schemeLen = strpos($normPath, '://', 0) + 3;
+							$divide = $schemeLen +strpos(substr($normPath, $schemeLen), '//', 0);
 						} else {
-							$divide = strpos($path, $uriPath, 0);
+							$divide = strpos($normPath, $uriPath, 0);
 						}
-						return substr($path, 0, $divide) . self :: clean(self :: arrive_part($uriPath, $mode)) . substr($path, $divide +strlen($uriPath));
+						return substr($normPath, 0, $divide) . self :: clean(self :: arrive_part($uriPath, $mode)) . substr($normPath, $divide +strlen($uriPath));
 					} else {
-						return $path;
+						return $normPath;
 					}
 				}
-				elseif (self :: is_root_model($path)) {
-					$path = substr($path, strlen(self :: document_root()));
+				elseif (self :: is_root_model($normPath)) {
+					$normPath = substr($normPath, strlen(self :: document_root()));
 				}
-				elseif (!self :: is_relative($path)) {
-					$uriScheme = strstr($path, ':', -1);
-					$path = substr($path, strlen($uriScheme) + 1);
-					return $uriScheme . ':' . self :: clean(self :: arrive_part($path, $mode));
+				elseif (!self :: is_relative($normPath)) {
+					$uriScheme = strstr($normPath, ':', -1);
+					$normPath = substr($normPath, strlen($uriScheme) + 1);
+					return $uriScheme . ':' . self :: clean(self :: arrive_part($normPath, $mode));
 				}
-				return self :: arrive_part($path, $mode);
+				return self :: arrive_part($normPath, $mode);
 			}
 			return false;
 		}
@@ -289,22 +288,22 @@ if (!class_exists('hpl_path')) {
 		 */
 		private static function clean_part($path = null, $mode = null) {
 			if (isset ($path { 0 })) {
-				$pathPart = explode('/', $path);
-				$end = (count($pathPart) - 1);
-				$path = '';
-				foreach ($pathPart as $sort => $part) {
+				$pathInfo = explode('/', $path);
+				$end = (count($pathInfo) - 1);
+				$cleanPath = '';
+				foreach ($pathInfo as $sort => $part) {
 					if (preg_match('/^(\.\.|\.)$/', $part)) {
-						$path .= ($sort == 0 ? '/' : '');
+						$cleanPath .= ($sort == 0 ? '/' : '');
 					} else {
 						if (!isset ($part { 0 })) {
-							$path .= (!$mode || $sort == $end ? '' : '/');
+							$cleanPath .= (!$mode || $sort == $end ? '' : '/');
 						} else {
-							$path .= $part . ($sort < $end ? '/' : '');
+							$cleanPath .= $part . ($sort < $end ? '/' : '');
 						}
 					}
 				}
 			}
-			return (isset ($path { 0 }) ? (substr($path, 0, 1) !== '/' ? '/' : '') . $path : '/');
+			return (isset ($cleanPath { 0 }) ? (substr($cleanPath, 0, 1) !== '/' ? '/' : '') . $cleanPath : '/');
 		}
 		/** Get the correct full path script name.
 		 * @access - public function
@@ -315,23 +314,23 @@ if (!class_exists('hpl_path')) {
 		 */
 		public static function clean($path = null, $mode = false) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: bool2error(1)) {
-				$path = self :: norm($path);
-				if (self :: is_absolute($path)) {
-					$uriPath = parse_url($path, PHP_URL_PATH);
+				$normPath = self :: norm($path);
+				if (self :: is_absolute($normPath)) {
+					$uriPath = parse_url($normPath, PHP_URL_PATH);
 					if ($uriPath) {
 						if ($uriPath == '//') {
-							$schemeLen = strpos($path, '://', 0) + 3;
-							$divide = $schemeLen +strpos(substr($path, $schemeLen), '//', 0);
+							$schemeLen = strpos($normPath, '://', 0) + 3;
+							$divide = $schemeLen +strpos(substr($normPath, $schemeLen), '//', 0);
 						} else {
-							$divide = strpos($path, $uriPath, 0);
+							$divide = strpos($normPath, $uriPath, 0);
 						}
-						return substr($path, 0, $divide) . self :: clean_part($uriPath, $mode) . substr($path, $divide +strlen($uriPath));
+						return substr($normPath, 0, $divide) . self :: clean_part($uriPath, $mode) . substr($normPath, $divide +strlen($uriPath));
 					} else {
-						return $path;
+						return $normPath;
 					}
 				} else {
-					$path = self :: clean_part((self :: is_root_model($path) ? substr($path, strlen(self :: document_root())) : $path), $mode);
-					return (isset ($path { 0 }) ? (!self :: is_relative($path) ? substr($path, 1) : $path) : '/');
+					$normPath = self :: clean_part((self :: is_root_model($normPath) ? substr($normPath, strlen(self :: document_root())) : $normPath), $mode);
+					return (isset ($normPath { 0 }) ? (!self :: is_relative($normPath) ? substr($normPath, 1) : $normPath) : '/');
 				}
 			}
 			return false;
@@ -380,10 +379,10 @@ if (!class_exists('hpl_path')) {
 		 */
 		public static function is_root_model($path = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				$path = self :: norm($path);
-				$path = (substr($path, -1, 1) !== '/' ? $path . '/' : $path);
+				$normPath = self :: norm($path);
+				$normPath = (substr($normPath, -1, 1) !== '/' ? $normPath . '/' : $normPath);
 				$root = self :: document_root();
-				if (strpos($path, $root) === 0) {
+				if (strpos($normPath, $root) === 0) {
 					return true;
 				}
 			}
@@ -414,22 +413,22 @@ if (!class_exists('hpl_path')) {
 		public static function is_self($path = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
 				if (isset ($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT'], $_SERVER['SCRIPT_NAME']) && is_string($_SERVER['SERVER_NAME']) && is_string($_SERVER['SERVER_PORT']) && is_string($_SERVER['SCRIPT_NAME']) && self :: is_absolute($path)) {
-					$path = self :: arrive($path);
-					return (parse_url($path, PHP_URL_HOST) === $_SERVER['SERVER_NAME'] && parse_url($path, PHP_URL_PATH) && self :: clean(parse_url($path, PHP_URL_PATH)) === self :: clean($_SERVER['SCRIPT_NAME']) && ((!parse_url($path, PHP_URL_PORT) && ($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443')) || (parse_url($path, PHP_URL_PORT) === $_SERVER['SERVER_PORT'])) ? true : false);
+					$arrivePath = self :: arrive($path);
+					return (parse_url($arrivePath, PHP_URL_HOST) === $_SERVER['SERVER_NAME'] && parse_url($arrivePath, PHP_URL_PATH) && self :: clean(parse_url($arrivePath, PHP_URL_PATH)) === self :: clean($_SERVER['SCRIPT_NAME']) && ((!parse_url($arrivePath, PHP_URL_PORT) && ($_SERVER['SERVER_PORT'] == '80' || $_SERVER['SERVER_PORT'] == '443')) || (parse_url($arrivePath, PHP_URL_PORT) === $_SERVER['SERVER_PORT'])) ? true : false);
 				}
 				elseif (isset ($_SERVER['SCRIPT_FILENAME']) && is_string($_SERVER['SCRIPT_FILENAME']) && (self :: is_root_model($path) || self :: is_relative($path))) {
 					if (self :: is_root_model($path)) {
-						$path = self :: arrive($path);
-						return (self :: clean($path) == self :: clean(realpath($_SERVER['SCRIPT_FILENAME'])) ? true : false);
+						$arrivePath = self :: arrive($path);
+						return (self :: clean($arrivePath) == self :: clean(realpath($_SERVER['SCRIPT_FILENAME'])) ? true : false);
 					} else {
-						$path = self :: arrive($path);
-						$path = explode('/', $path);
-						$path = array_reverse($path);
+						$arrivePath = self :: arrive($path);
+						$arrivePath = explode('/', $arrivePath);
+						$arrivePath = array_reverse($arrivePath);
 						$script = self :: clean(realpath($_SERVER['SCRIPT_FILENAME']));
 						$script = explode('/', $script);
 						$script = array_reverse($script);
 						$layer = 0;
-						foreach ($path as $sort => $part) {
+						foreach ($arrivePath as $sort => $part) {
 							if (!preg_match('/^(\.\.|\.)$/', $part) && (!isset ($script[$sort]) || $script[$sort] !== $part)) {
 								return false;
 							}

@@ -35,9 +35,9 @@ if (!class_exists('hpl_error')) {
 				self :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects parameter 1 to be callable, ' . strtolower(gettype($errorHandler)) . ' given', E_USER_WARNING, 1);
 			} else {
 				if (!is_null($errorHandler)) {
-					$errorHandler = (is_array($errorHandler) ? implode('::', $errorHandler) : $errorHandler);
-					self :: $errorHandlerList[] = $errorHandler;
-					self :: $errorHandler = $errorHandler;
+					$useErrorHandler = (is_array($errorHandler) ? implode('::', $errorHandler) : $errorHandler);
+					self :: $errorHandlerList[] = $useErrorHandler;
+					self :: $errorHandler = $useErrorHandler;
 				}
 				/* set default error_handler */
 				set_error_handler(self :: $errorHandler ? self :: $errorHandler : __CLASS__ . '::ErrorHandler');
@@ -63,17 +63,17 @@ if (!class_exists('hpl_error')) {
 			elseif (!is_bool($peel)) {
 				self :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects parameter 2 to be boolean, ' . strtolower(gettype($peel)) . ' given', E_USER_WARNING, 1);
 			} else {
-				$path = strtr($path, '\\', '/');
-				if (isset ($path { 0 }) && !filter_var($path, FILTER_VALIDATE_URL) && substr($path, -1, 1) !== '/') {
+				$normPath = strtr($path, '\\', '/');
+				if (isset ($normPath { 0 }) && !filter_var($normPath, FILTER_VALIDATE_URL) && substr($normPath, -1, 1) !== '/') {
 					if (!$peel) {
-						ini_set('error_log', $path);
-						if (strtr(ini_get('error_log'), '\\', '/') === $path) {
+						ini_set('error_log', $normPath);
+						if (strtr(ini_get('error_log'), '\\', '/') === $normPath) {
 							self :: $logFile = null;
 							return true;
 						}
 					} else {
-						ini_set('error_log', $path);
-						self :: $logFile = $path;
+						ini_set('error_log', $normPath);
+						self :: $logFile = $normPath;
 						return true;
 					}
 				}
@@ -148,7 +148,7 @@ if (!class_exists('hpl_error')) {
 			elseif (!is_string($logTitle)) {
 				self :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects parameter 4 to be string, ' . strtolower(gettype($logTitle)) . ' given', E_USER_WARNING, 1);
 			} else {
-				$echoDepth = $echoDepth +4;
+				$countEchoDepth = $echoDepth +4;
 				/* check function in error_handler */
 				$inHandler = false;
 				$errorHandler = false;
@@ -159,17 +159,17 @@ if (!class_exists('hpl_error')) {
 						$errorHandler = $needle;
 					}
 					if (!isset ($in['file']) && !isset ($in['line'])) {
-						$echoDepth = ($echoDepth >= (4 + $i) ? 4 + $i -1 : $echoDepth);
+						$countEchoDepth = ($countEchoDepth >= (4 + $i) ? 4 + $i -1 : $countEchoDepth);
 						$inHandler = true;
 						break;
 					}
 				}
 				/* build cast error info */
 				self :: $castList[] = array (
-					'echoDepth' => $echoDepth,
+					'echoDepth' => $countEchoDepth,
 					'errno' => $errno,
-					'message' => substr($message, 0, 1024), 
-					'logTitle' => ($numArgs == 4 ? $logTitle : null), 
+					'message' => substr($message, 0, 1024),
+					'logTitle' => ($numArgs == 4 ? $logTitle : null),
 					'cancelTrace' => ($inHandler && $errorHandler === self :: $errorHandler)
 					);
 				end(self :: $castList);

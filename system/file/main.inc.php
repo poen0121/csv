@@ -16,11 +16,11 @@ if (!class_exists('hpl_file')) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
 				if (isset ($path { 0 })) {
 					clearstatcache();
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && (is_file($path) || is_dir($path))) {
-						$result = substr(sprintf('%o', fileperms($path)), -4);
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && (is_file($normPath) || is_dir($normPath))) {
+						$result = substr(sprintf('%o', fileperms($normPath)), -4);
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);
@@ -40,11 +40,11 @@ if (!class_exists('hpl_file')) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: int2error(1)) {
 				if (isset ($path { 0 })) {
 					clearstatcache();
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && (is_file($path) || is_dir($path))) {
-						$result = chmod($path, $power);
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && (is_file($normPath) || is_dir($normPath))) {
+						$result = chmod($normPath, $power);
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);
@@ -75,12 +75,12 @@ if (!class_exists('hpl_file')) {
 		 * @param - string $path (path)
 		 * @param - string $query_keep (after the question mark ? data keep mode) : Default false
 		 * @return - string|boolean
-		 * @usage - hpl_file::fullname($path);
+		 * @usage - hpl_file::fullname($path,$queryKeep);
 		 */
-		public static function fullname($path = null, $query_keep = false) {
+		public static function fullname($path = null, $queryKeep = false) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: bool2error(1)) {
-				$path = pathInfo(hpl_path :: norm($path), PATHINFO_BASENAME);
-				return ($query_keep ? $path : str_replace(strstr($path, '?'), '', $path));
+				$basePath = pathInfo(hpl_path :: norm($path), PATHINFO_BASENAME);
+				return ($queryKeep ? $basePath : str_replace(strstr($basePath, '?'), '', $basePath));
 			}
 			return false;
 		}
@@ -116,8 +116,8 @@ if (!class_exists('hpl_file')) {
 		 */
 		public static function directory($path = null) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
-				$path = pathInfo($path, PATHINFO_DIRNAME);
-				return (isset ($path { 0 }) ? (($path == '\\' ? '.' : hpl_path :: norm($path)) . '/') : '');
+				$dirPath = pathInfo($path, PATHINFO_DIRNAME);
+				return (isset ($dirPath { 0 }) ? (($dirPath == '\\' ? '.' : hpl_path :: norm($dirPath)) . '/') : '');
 			}
 			return false;
 		}
@@ -160,12 +160,13 @@ if (!class_exists('hpl_file')) {
 					} else {
 						$unit = array ('Byte','KB','MB','GB','TB','PB','EB','ZB','YB');
 						$flag = 0;
-						while ($flag < 8 && $size >= 1024) {
-							$size = $size / 1024;
+						$bytes = $size;
+						while ($flag < 8 && $bytes >= 1024) {
+							$bytes = $bytes / 1024;
 							$flag++;
 						}
-						$result = round($size, 2);
-						$result = ($size > $result ? $result +0.01 : $result);
+						$result = round($bytes, 2);
+						$result = ($bytes > $result ? $result +0.01 : $result);
 						return ($flag > 0 ? number_format($result, 2) : number_format($result)) . ' ' . $unit[$flag];
 					}
 				} else {
@@ -235,9 +236,9 @@ if (!class_exists('hpl_file')) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
 				if (isset ($path { 0 })) {
 					clearstatcache();
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && is_file($path)) {
-						$size = filesize($path);
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && is_file($normPath)) {
+						$size = filesize($normPath);
 						if ($size !== false) {
 							if ($size > (1024 * pow(1024, 8))) {
 								hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Size has been unable to handle', E_USER_WARNING, 1);
@@ -246,7 +247,7 @@ if (!class_exists('hpl_file')) {
 							}
 						}
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);
@@ -270,36 +271,36 @@ if (!class_exists('hpl_file')) {
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: string2error(1) && !hpl_func_arg :: bool2error(2)) {
 				if (isset ($path { 0 })) {
 					clearstatcache();
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && is_file($path) && is_readable($path)) {
-						$mode = strtolower($mode);
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && is_file($normPath) && is_readable($normPath)) {
+						$useMode = strtolower($mode);
 						$modes = array ('r','rb');
-						if (!in_array($mode, $modes)) {
+						if (!in_array($useMode, $modes)) {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid mode specified', E_USER_WARNING, 1);
 							return false;
 						}
-						$fp = fopen($path, $mode);
+						$fp = fopen($normPath, $useMode);
 						if ($fp) {
 							$action = ($lock ? flock($fp, LOCK_SH) : true);
 							if ($action) {
-								$bytes = filesize($path);
+								$bytes = filesize($normPath);
 								if ($bytes !== false) {
 									$result = stream_get_contents($fp, -1);
 									$result = ($result !== false && !isset($result { 0 }) && $bytes > 0 ? false : $result);
 									if ($result === false) {
-										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Unable to read file ' . $path, E_USER_NOTICE, 1);
+										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Unable to read file ' . $normPath, E_USER_NOTICE, 1);
 									}
 								}
 								if ($lock) {
 									flock($fp, LOCK_UN);
 								}
 							} else {
-								hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
+								hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $normPath . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
 							}
 							fclose($fp);
 						}
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);
@@ -320,29 +321,29 @@ if (!class_exists('hpl_file')) {
 			$result = false;
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: string2error(1) && !hpl_func_arg :: string2error(2) && !hpl_func_arg :: bool2error(3)) {
 				if (isset ($path { 0 })) {
-					$path = hpl_path :: norm($path);
-					if (!hpl_path :: is_absolute($path) && hpl_path :: is_files($path) && self :: fullname($path)) {
-						$mode = strtolower($mode);
+					$normPath = hpl_path :: norm($path);
+					if (!hpl_path :: is_absolute($normPath) && hpl_path :: is_files($normPath) && self :: fullname($normPath)) {
+						$useMode = strtolower($mode);
 						$modes = array ('w','a','wb','ab');
-						if (!in_array($mode, $modes)) {
+						if (!in_array($useMode, $modes)) {
 							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Invalid mode specified', E_USER_WARNING, 1);
 							return false;
 						}
 						//check dir
 						clearstatcache();
-						$dir = self :: directory($path);
+						$dir = self :: directory($normPath);
 						if (!file_exists($dir)) {
 							$result = mkdir($dir, 0755, true);
 						}
 						elseif (is_dir($dir)) {
 							$result = true;
 						} else {
-							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 						}
 						if ($result) { //check dir result
 							$result = false; //init result
 							$bytes = strlen($content);
-							$fp = fopen($path, $mode);
+							$fp = fopen($normPath, $useMode);
 							if ($fp) {
 								$action = ($lock ? flock($fp, LOCK_EX) : true);
 								if ($action) {
@@ -352,16 +353,16 @@ if (!class_exists('hpl_file')) {
 										flock($fp, LOCK_UN);
 									}
 									if (!$result) {
-										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Unable to write to file ' . $path, E_USER_NOTICE, 1);
+										hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Unable to write to file ' . $normPath, E_USER_NOTICE, 1);
 									}
 								} else {
-									hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $path . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
+									hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(' . $normPath . '): failed to open stream: Advisory file locking failures', E_USER_NOTICE, 1);
 								}
 								fclose($fp);
 							}
 						}
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $path, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normPath, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);
@@ -380,19 +381,19 @@ if (!class_exists('hpl_file')) {
 			$result = false;
 			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: int2error(1)) {
 				if ($dir) {
-					$dir = hpl_path :: norm($dir);
-					if (!hpl_path :: is_absolute($dir)) {
+					$normDir = hpl_path :: norm($dir);
+					if (!hpl_path :: is_absolute($normDir)) {
 						clearstatcache();
-						if (!file_exists($dir)) {
-							$result = mkdir($dir, $power, true);
+						if (!file_exists($normDir)) {
+							$result = mkdir($normDir, $power, true);
 						}
-						elseif (is_dir($dir)) {
-							$result = chmod($dir, $power);
+						elseif (is_dir($normDir)) {
+							$result = chmod($normDir, $power);
 						} else {
-							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $dir, E_USER_WARNING, 1);
+							hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normDir, E_USER_WARNING, 1);
 						}
 					} else {
-						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $dir, E_USER_WARNING, 1);
+						hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Stat failed for ' . $normDir, E_USER_WARNING, 1);
 					}
 				} else {
 					hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Empty path supplied as input', E_USER_WARNING, 1);

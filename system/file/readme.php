@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_file function
-	Revision	: 4.4.3
+	Revision	: 4.4.4
 	Notes		:
 
 	Revision History:
@@ -44,6 +44,7 @@
 	06-07-2017		Poen		06-07-2017	Poen		Debug size2unit function.
 	06-07-2017		Poen		06-07-2017	Poen		Debug unit2min function.
 	06-07-2017		Poen		06-07-2017	Poen		Debug unit2max function.
+	02-06-2018		Poen		02-06-2018	Poen		Fix PHP 7 content function to retain original input args.
 	---------------------------------------------------------------------------
 
 >> About
@@ -95,9 +96,9 @@
 
 	==============================================================
 	Get path's file full name.
-	Usage : hpl_file::fullname($path);
+	Usage : hpl_file::fullname($path,$queryKeep);
 	Param : string $path (path)
-	Param : string $query_keep (after the question mark ? data keep mode) : Default false
+	Param : string $queryKeep (after the question mark ? data keep mode) : Default false
 	Return : string
 	--------------------------------------------------------------
 	Example :
