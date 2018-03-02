@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_error function
-	Revision	: 2.14.6
+	Revision	: 2.14.7
 	Notes		:
 
 	Revision History:
@@ -34,6 +34,7 @@
 	09-13-2017		Poen		09-18-2017	Poen		Add capture function.
 	02-06-2018		Poen		02-06-2018	Poen		Fix PHP 7 content function to retain original input args.
 	02-26-2018		Poen		02-26-2018	Poen		Fix send error signal to error_get_last function capture.
+	03-02-2018		Poen		03-02-2018	Poen		Improve the error signal sent to the error_get_last function.
 	---------------------------------------------------------------------------
 
 >> About

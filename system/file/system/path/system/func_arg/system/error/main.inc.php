@@ -252,7 +252,13 @@ if (!class_exists('hpl_error')) {
 				return;
 			}
 			/* send an error signal for error_get_last() */
-			@ trigger_error('ERROR_LAST_SIGNAL');
+			$errorLevel = error_reporting();
+			if (ini_set('error_reporting', 0) !== false) { //avoid showing error message
+				trigger_error('ERROR_LAST_SIGNAL');
+				ini_set('error_reporting', $errorLevel);
+			} else {
+				@ trigger_error('ERROR_LAST_SIGNAL'); //avoid showing error message
+			}
 			/* build mark */
 			$mark = '';
 			switch ($errno) {
