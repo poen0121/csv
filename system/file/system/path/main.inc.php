@@ -121,7 +121,6 @@ if (!class_exists('hpl_path')) {
 							$scriptDir = (substr($scriptDir, -1, 1) !== '/' ? $scriptDir . '/' : $scriptDir);
 							$scriptDir = self :: clean($scriptDir);
 							$ownPath = explode('/', $scriptDir);
-							$ownPathLen = count($ownPath) - 1;
 							$arrivePath = self :: arrive($path);
 							$cut = self :: relative_layer_count($arrivePath); //for cut own path
 							$arrivePath = self :: clean($arrivePath);

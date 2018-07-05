@@ -150,6 +150,7 @@ if (!class_exists('hpl_csv')) {
 						}
 						$csv_line = preg_replace('/(?: |[ ])?$/', $d, trim($line));
 						$csv_pattern = '/(' . $e . '[^' . $e . ']*(?:' . $e . $e . '[^' . $e . ']*)*' . $e . '|[^' . $d . ']*)' . $d . '/';
+						$csv_matches = null;
 						preg_match_all($csv_pattern, $csv_line, $csv_matches);
 						$csv_data = $csv_matches[1];
 						for ($csv_i = 0; $csv_i < count($csv_data); $csv_i++) {
