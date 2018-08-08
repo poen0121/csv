@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_path function
-	Revision	: 3.10.8
+	Revision	: 3.10.9
 	Notes		: You can use chdir() change current script parent directories.
 
 	Revision History:
@@ -45,6 +45,7 @@
 	04-27-2017		Poen		04-27-2017	Poen		Debug document_root function.
 	04-27-2017		Poen		04-28-2017	Poen		Debug absolute function.
 	02-06-2018		Poen		02-06-2018	Poen		Fix PHP 7 content function to retain original input args.
+	08-08-2018		Poen		08-08-2018	Poen		Fix arrive function argument type judgment.
 	---------------------------------------------------------------------------
 
 >> About
@@ -203,7 +204,7 @@
 
 	==============================================================
 	Returns the full path to arrive.
-	Usage : hpl_path::arrive($path);
+	Usage : hpl_path::arrive($path,$mode);
 	Param : string $path (path)
 	Param : boolean $mode (keep empty string directory) : Default false
 	Return : string
@@ -239,7 +240,7 @@
 
 	==============================================================
 	Get the correct full path script name.
-	Usage : hpl_path::clean($path);
+	Usage : hpl_path::clean($path,$mode);
 	Param : string $path (path)
 	Param : boolean $mode (keep empty string directory) : Default false
 	Return : string

@@ -202,7 +202,7 @@ if (!class_exists('hpl_path')) {
 		 * @param - string $path (path)
 		 * @param - boolean $mode (keep empty string directory)
 		 * @return - string
-		 * @usage - self::arrive_part($path);
+		 * @usage - self::arrive_part($path,$mode);
 		 */
 		private static function arrive_part($path = null, $mode = null) {
 			if (isset ($path { 0 })) {
@@ -247,10 +247,10 @@ if (!class_exists('hpl_path')) {
 		 * @param - string $path (path)
 		 * @param - boolean $mode (keep empty string directory) : Default false
 		 * @return - string|boolean
-		 * @usage - hpl_path::arrive($path);
+		 * @usage - hpl_path::arrive($path,$mode);
 		 */
 		public static function arrive($path = null, $mode = false) {
-			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0)) {
+			if (!hpl_func_arg :: delimit2error() && !hpl_func_arg :: string2error(0) && !hpl_func_arg :: bool2error(1)) {
 				$normPath = self :: norm($path);
 				if (self :: is_absolute($normPath)) {
 					$uriPath = parse_url($normPath, PHP_URL_PATH);
@@ -283,7 +283,7 @@ if (!class_exists('hpl_path')) {
 		 * @param - string $path (path)
 		 * @param - boolean $mode (keep empty string directory)
 		 * @return - string
-		 * @usage - self::clean_part($path);
+		 * @usage - self::clean_part($path,$mode);
 		 */
 		private static function clean_part($path = null, $mode = null) {
 			if (isset ($path { 0 })) {
