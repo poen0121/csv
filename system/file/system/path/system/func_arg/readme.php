@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_func_arg function
-	Revision	: 1.6.2
+	Revision	: 1.6.3
 	Notes		:
 
 	Revision History:
@@ -17,6 +17,7 @@
 	11-22-2016		Poen		11-22-2016	Poen		Debug the program error messages.
 	03-22-2017		Poen		08-08-2018	Poen		Improve the program.
 	03-22-2017		Poen		03-22-2017	Poen		Fix the program error message.
+	08-08-2018		Poen		08-08-2018	Poen		Remove error begins.
 	---------------------------------------------------------------------------
 
 >> About
