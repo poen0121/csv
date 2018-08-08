@@ -28,25 +28,17 @@ if (!class_exists('hpl_func_arg')) {
 			} else {
 				//get parameters data list
 				$parameters = & $caller['args'];
-				if (isset ($caller['class'])) { //class function parameters
-					$ref = new ReflectionMethod($caller['class'], $caller['function']);
-					foreach ($ref->getParameters() as $key => $arg) {
-						if ($key == $var) {
-							if (!array_key_exists($key, $caller['args'])) {
-								$parameters[$key] = ($arg->isDefaultValueAvailable() ? $arg->getDefaultValue() : NULL);
-							}
-							break;
-						}
+				if (!array_key_exists($var, $caller['args'])) {
+					if (isset ($caller['class'])) { //class function parameters
+						$ref = new ReflectionMethod($caller['class'], $caller['function']);
+					} else { //function parameters
+						$ref = new ReflectionFunction($caller['function']);
 					}
-				} else { //function parameters
-					$ref = new ReflectionFunction($caller['function']);
-					foreach ($ref->getParameters() as $key => $arg) {
-						if ($key == $var) {
-							if (!array_key_exists($key, $caller['args'])) {
-								$parameters[$key] = ($arg->isDefaultValueAvailable() ? $arg->getDefaultValue() : NULL);
-							}
-							break;
-						}
+					//push parameters data
+					$getParameters = $ref->getParameters();
+					if (array_key_exists($var, $getParameters)) {
+						$arg = & $getParameters[$var];
+						$parameters[$var] = ($arg->isDefaultValueAvailable() ? $arg->getDefaultValue() : NULL);
 					}
 				}
 				//check parameter data exist
@@ -69,11 +61,12 @@ if (!class_exists('hpl_func_arg')) {
 			hpl_error :: begin();
 			$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
 			$caller = end($backtrace);
+			$numArgs = func_num_args();
 			if (isset ($caller['class']) && $caller['class'] == __CLASS__) {
 				hpl_error :: cast($caller['class'] . '::' . $caller['function'] . '(): Called from the global scope - no function context', E_USER_WARNING, 1);
 			}
-			elseif (func_num_args() > 0) {
-				hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects at most 0 parameters, ' . func_num_args() . ' given', E_USER_WARNING, 1);
+			elseif ($numArgs > 0) {
+				hpl_error :: cast(__CLASS__ . '::' . __FUNCTION__ . '(): Expects at most 0 parameters, ' . $numArgs . ' given', E_USER_WARNING, 1);
 			}
 			elseif (isset ($caller['class'])) { //class function parameters
 				$ref = new ReflectionMethod($caller['class'], $caller['function']);
