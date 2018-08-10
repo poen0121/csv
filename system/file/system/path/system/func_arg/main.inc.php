@@ -10,7 +10,7 @@ if (!class_exists('hpl_func_arg')) {
 		 * @param - integer &$var (number id)
 		 * @param - array &$itself (backtrace itself array)
 		 * @param - array &$caller (backtrace caller array)
-		 * @return - array(var=>value)|null
+		 * @return - array(value)|null
 		 * @usage - self::parameter(&$var,&$itself,&$caller);
 		 */
 		private static function parameter(& $var, & $itself, & $caller) {
@@ -26,28 +26,27 @@ if (!class_exists('hpl_func_arg')) {
 			elseif (is_int($var) && $var < 0) {
 				hpl_error :: cast($itself['class'] . '::' . $itself['function'] . '(): The argument number should be >= 0', E_USER_WARNING, 2);
 			} else {
-				//get parameters data list
-				$parameters = & $caller['args'];
-				if (!array_key_exists($var, $caller['args'])) {
+				//get parameters data
+				if (array_key_exists($var, $caller['args'])) {
+					return array (
+						$caller['args'][$var]
+					);
+				} else {
 					if (isset ($caller['class'])) { //class function parameters
 						$ref = new ReflectionMethod($caller['class'], $caller['function']);
 					} else { //function parameters
 						$ref = new ReflectionFunction($caller['function']);
 					}
-					//push parameters data
+					//get parameters default data
 					$getParameters = $ref->getParameters();
 					if (array_key_exists($var, $getParameters)) {
 						$arg = & $getParameters[$var];
-						$parameters[$var] = ($arg->isDefaultValueAvailable() ? $arg->getDefaultValue() : NULL);
+						return array (
+							($arg->isDefaultValueAvailable() ? $arg->getDefaultValue() : NULL)
+						);
+					} else {
+						hpl_error :: cast($itself['class'] . '::' . $itself['function'] . '(): Argument ' . $var . ' not passed to function', E_USER_WARNING, 2);
 					}
-				}
-				//check parameter data exist
-				if (array_key_exists($var, $parameters)) {
-					return array (
-						$parameters[$var]
-					);
-				} else {
-					hpl_error :: cast($itself['class'] . '::' . $itself['function'] . '(): Argument ' . $var . ' not passed to function', E_USER_WARNING, 2);
 				}
 			}
 			return;
