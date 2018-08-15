@@ -3,7 +3,7 @@
 >> Information
 
 	Title		: hpl_path function
-	Revision	: 3.10.9
+	Revision	: 3.10.10
 	Notes		: You can use chdir() change current script parent directories.
 
 	Revision History:
@@ -14,7 +14,7 @@
 	08-16-2016		Poen		08-16-2016	Poen		Add is_root_model function.
 	08-22-2016		Poen		08-22-2016	Poen		Add full function.
 	08-22-2016		Poen		08-22-2016	Poen		Improve relative function.
-	08-22-2016		Poen		08-22-2016	Poen		Improve absolute function.
+	08-22-2016		Poen		08-15-2018	Poen		Improve absolute function.
 	08-22-2016		Poen		08-22-2016	Poen		Improve parent function.
 	08-22-2016		Poen		08-22-2016	Poen		Change parent function name become cut_root.
 	08-23-2016		Poen		08-23-2016	Poen		Remove cut_root function.
